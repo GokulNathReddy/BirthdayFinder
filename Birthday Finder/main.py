@@ -21,60 +21,50 @@ def find_century_code(year):
         return None
     return century_code
 
-def find_month_code(month) :
-    if month == "January" :
-        month_code = 0
-    elif month =="February":
-        month_code = 3
-    elif month == "March" :
-        month_code = 3
-    elif month == "April" :
-        month_code = 6
-    elif month == "May" :
-        month_code = 1
-    elif month == "June":
-        month_code = 4
-    elif month == "July" :
-        month_code = 6
-    elif month == "August":
-        month_code = 2
-    elif month == "September":
-        month_code = 5
-    elif month == "October" :
-        month_code = 0
-    elif month == "November " :
-        month_code = 3
-    elif month_code == "December " :
-        month_code = 5
-    else :
-        print(f"Enter A Valid Month")
-    return month_code
+def find_month_code(month):
+    month_codes = {
+        "January": 0, "February": 3, "March": 3, "April": 6, "May": 1, "June": 4,
+        "July": 6, "August": 2, "September": 5, "October": 0, "November": 3, "December": 5
+    }
+    return month_codes.get(month, None)
 
-def find_day_code(day) :
-    if day == "Sunday" :
-        day_code = 0
-    elif day == "Monday" :
-        day_code = 1
-    elif day == "Tuesday" :
-        day_code = 2
-    elif day == "Wednesday" :
-        day_code = 3
-    elif day == "Thursday " :
-        day_code = 4
-    elif day == "Friday " :
-        day_code = 5
-    elif day_code == "Saturday" :
-        day_code = 6
-    else:
-        print(f"Enter A Valid Date" ) 
-    return day_code
+def find_day_code(day):
+    day_codes = {
+        "Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6
+    }
+    return day_codes.get(day, None)
 
-def main() :
-    print(Fore.CYAN + Style.BRIGHT + f"THIS PROGRAM WILL FIND THE DAY OF YOUR BIRTHDAY" + Style.RESET_ALL)
+def main():
+    print(Fore.CYAN + Style.BRIGHT + "THIS PROGRAM WILL FIND THE DAY OF YOUR BIRTHDAY" + Style.RESET_ALL)
+
+    dob = input("Enter Your Date Of Birth In DD/MM/YYYY Format: ")
+    day, month, year = map(int, dob.split('/'))
+
+    if month < 1 or month > 12 or day < 1 or day > 31 or year < 1500 or year > 2299:
+        print("Invalid input or calculation error.")
+        return
     
-    dob = input(f"Enter Your Date Of Birth In DD/MM/YYYY Format : ")
+    century = year // 100
+    year_within_century = year % 100
 
+    century_code = find_century_code(century * 100)
+    month_name = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ][month - 1]
+    month_code = find_month_code(month_name)
+    
+    if century_code is None or month_code is None:
+        print("Invalid input or calculation error.")
+        return
+    
+    day_code = (day + month_code + year_within_century + year_within_century // 4 + century_code) % 7
+    
+    day_names = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    birth_day = day_names[day_code]
+    
+    print(f"Your birth day is: {birth_day}")
 
-
-
+if __name__ == "__main__":
+    main()
     
